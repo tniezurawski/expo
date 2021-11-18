@@ -5,7 +5,7 @@ sidebar_title: Expo Updates
 
 Version 0
 
-Updated 2021-10-22
+Updated 2021-11-17
 
 ---
 
@@ -49,13 +49,14 @@ A conformant client library MUST make a GET request with the headers:
 
 A conformant client library MUST also send at least one of `accept: application/expo+json` or `accept: application/json`, though SHOULD send `accept: application/expo+json, application/json` with the order following the preference ordering for the accept header specified in [RFC 7231](https://tools.ietf.org/html/rfc7231#section-5.3.2).
 
-A conformant client library MAY also send a `expo-expects-signed-hash` header to indicate that it expects the conformant server to serve the `expo-signed-hash` header for each asset and manifest request to perform [codesigning](#codesigning).
+A conformant client library configured to perform [code signing](#code-signing) verification SHOULD also send a `expo-expects-signature` header to indicate that it expects the conformant server to include the `expo-signature` header in the manifest response.
 
 Example:
 ```
 accept: application/expo+json, application/json
 expo-platform: *
 expo-runtime-version: *
+expo-expects-signature: *
 ```
 
 ## Manifest Response
@@ -75,7 +76,8 @@ expo-manifest-filters: &lt;expo-sfv&gt;
 expo-server-defined-headers: &lt;expo-sfv&gt;
 cache-control: *
 content-type: *
-expo-signed-hash: *
+expo-signature: *
+expo-asset-headers: *
 ```
 
 * `expo-protocol-version` describes the version of the protocol defined in this spec and MUST be `0`.
@@ -84,8 +86,17 @@ expo-signed-hash: *
 * `expo-server-defined-headers` is an [Expo SFV](expo-sfv.md) dictionary. It defines headers that a client library MUST store until overwritten by a newer dictionary, and they MUST be included in every subsequent [manifest request](#manifest-request).
 * `cache-control` - A value of `cache-control: private, max-age=0` is recommended to ensure the newest manifest is returned. Setting longer cache ages could result in stale updates.
 * `content-type` MUST be determined by _proactive negotiation_ as defined in [RFC 7231](https://tools.ietf.org/html/rfc7231#section-3.4.1). Since the client library is [required](#manifest-request) to send an `accept` header with each manifest request, this will always be either `application/expo+json`, `application/json`; otherwise the request would return a `406` error.
-* `expo-signed-hash` MAY contain the sha256 digest of the manifest encrypted using the [codesigning](#codesigning) private key.
-
+* `expo-signature` SHOULD contain the signature of the manifest to be used during the validation step of [code signing](#code-signing) if the request for the manifest contained the `expo-expects-signature` header.
+* `expo-asset-headers` MAY contain a JSON dictionary of header (key, value) pairs to include with asset requests. This is specified as a header so that dynamic headers needed to request assets (HMACs for example) don't alter the `expo-signature`. This is structured as follows:
+```typescript
+export type ExpoAssetHeaderDictionary = {
+  [key: <asset key>]: {
+    'header-name': 'header-value',
+    ...
+  },
+  ...
+}
+```
 
 The manifest endpoint MUST also be served with a `cache-control` header set to an appropriately short period of time. For example:
 
@@ -113,6 +124,7 @@ type Asset = {
   contentType: string;
   fileExtension?: string;
   url: string;
+  signature?: string;
 }
 ```
   * `id`: The ID MUST uniquely specify the manifest.
@@ -127,6 +139,7 @@ type Asset = {
     * `fileExtension`: The suggested extension to use when a file is saved on a client. Some platforms, such as iOS, require certain file types to be saved with an extension. The extension MUST be prefixed with a `.`. e.g. `.jpeg`. In some cases, such as the launchAsset, this field will be ignored in favor of a locally determined extension. If the field is omitted and there is no locally stipulated extension, the asset will be saved without an extension, e.g. `./filename` with no `.` at the end.
     A conforming client SHOULD prefix a file extension with a `.` if a file extension is not empty and missing the `.` prefix.
     * `url`: Location at which the file may be fetched.
+    * `signature`: MAY contain the signature of the asset to be used during the validation step of [code signing](#code-signing). Alternatively, the signature may be specified in an `expo-signature` response header on the asset request itself. The behavior of specifying both is undefined, but one or the other must be specified if the request for the manifest contained the `expo-expects-signature` header.
   * `metadata`: The metadata associated with an update. It is a string-valued dictionary. The server MAY send back anything it wishes to be used for filtering the updates. The metadata MUST pass the filter defined in the accompanying `expo-manifest-filters` header.
   * `extra`: For storage of optional "extra" information such as third-party configuration. For example, if the update is hosted on Expo Application Services (EAS), the EAS project ID may be included:
   ```typescript
@@ -145,22 +158,24 @@ Example headers:
 ```
 accept: image/jpeg, */*
 accept-encoding: br, gzip
+expo-expects-signature: *
 ```
 
-* `expo-signed-hash` MAY contain the sha256 digest of the asset encrypted using the [codesigning](#codesigning) private key.
+A conformant client library configured to perform [code signing](#code-signing) verification SHOULD also send a `expo-expects-signature` header to indicate that it expects the conformant server to include the `expo-signature` header in each asset response. Note that if the asset signatures were included in the manifest, including the `expo-signature` header in each asset response is not required.
+
+A conformant client library SHOULD also include any header (key, value) pairs included in the `expo-asset-headers` manifest response header for this asset key.
 
 ## Asset Response
 
 An asset located at a particular URL MUST NOT be changed or removed since client libraries may fetch assets for any update at any time.
 
-### Asset Headers
+### Asset Response Headers
 
 The asset MUST be encoded using a compression format that the client supports according to the request's `accept-encoding` header. The server MAY serve uncompressed assets. The response MUST include a `content-type` header with the MIME type of the asset.
 For example:
 ```
 content-encoding: br
 content-type: application/javascript
-expo-signed-hash: *
 ```
 
 An asset is RECOMMENDED to be served with a `cache-control` header set to a long duration as an asset located at a given URL must not change. For example:
@@ -169,13 +184,15 @@ An asset is RECOMMENDED to be served with a `cache-control` header set to a long
 cache-control: public, max-age=31536000, immutable
 ```
 
+* `expo-signature` SHOULD contain the signature of the asset to be used during the validation step of [code signing](#code-signing) if the request for the asset contained the `expo-expects-signature` header and the signature for the asset was not specified in the manifest response.
+
 ### Compression
 
 Assets SHOULD be capable of being served with [Gzip](https://www.gnu.org/software/gzip/) and [Brotli](https://github.com/google/brotli) compression.
 
-### Codesigning
+### Code Signing
 
-Expo Updates supports codesigning for all assets (including `launchAsset`) and the manifest itself. A conformant client MAY request that all assets and manifest be codesigned using a private key, and then MUST verify the digest signatures of the assets and manifest using the corresponding public key which is generally bundled in to the conformant client.
+Expo Updates supports code signing for all assets (including `launchAsset`) and the manifest itself. A conformant client MAY request that all assets and manifest be signed using a private key, and then MUST verify the signatures of the assets and manifest using the corresponding code signing certificate before they are used.
 
 ## Client Library
 
