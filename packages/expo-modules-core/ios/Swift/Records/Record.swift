@@ -38,7 +38,9 @@ public extension Record {
     self.init()
 
     try fieldsOf(self).forEach { field in
-      try field.set(dict[field.key!])
+      if let key = field.key, dict.keys.contains(key) {
+        try field.set(dict[key])
+      }
     }
   }
 

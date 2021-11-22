@@ -92,9 +92,6 @@ PODS:
   - EXImageLoader (3.0.0):
     - ExpoModulesCore
     - React-Core
-  - EXImageManipulator (10.1.0):
-    - EXImageLoader
-    - ExpoModulesCore
   - EXImagePicker (11.0.1):
     - ExpoModulesCore
   - EXInAppPurchases (12.0.0):
@@ -208,6 +205,9 @@ PODS:
   - ExpoCellular (4.0.0):
     - ExpoModulesCore
   - ExpoHaptics (11.0.1):
+    - ExpoModulesCore
+  - ExpoImageManipulator (10.1.0):
+    - EXImageLoader
     - ExpoModulesCore
   - ExpoLinearGradient (10.0.1):
     - ExpoModulesCore
@@ -797,7 +797,6 @@ DEPENDENCIES:
   - EXGoogleSignIn (from `../../../packages/expo-google-sign-in/ios`)
   - EXImage (from `../../../packages/expo-image`)
   - EXImageLoader (from `../../../packages/expo-image-loader/ios`)
-  - EXImageManipulator (from `../../../packages/expo-image-manipulator/ios`)
   - EXImagePicker (from `../../../packages/expo-image-picker/ios`)
   - EXInAppPurchases (from `../../../packages/expo-in-app-purchases/ios`)
   - EXJSONUtils (from `../../../packages/expo-json-utils/ios`)
@@ -822,6 +821,7 @@ DEPENDENCIES:
   - expo-dev-menu/UITests (from `../../../packages/expo-dev-menu`)
   - ExpoCellular (from `../../../packages/expo-cellular/ios`)
   - ExpoHaptics (from `../../../packages/expo-haptics/ios`)
+  - ExpoImageManipulator (from `../../../packages/expo-image-manipulator/ios`)
   - ExpoLinearGradient (from `../../../packages/expo-linear-gradient/ios`)
   - ExpoModulesCore (from `../../../packages/expo-modules-core/ios`)
   - ExpoSystemUI (from `../../../packages/expo-system-ui/ios`)
@@ -1026,9 +1026,6 @@ EXTERNAL SOURCES:
   EXImageLoader:
     inhibit_warnings: false
     :path: "../../../packages/expo-image-loader/ios"
-  EXImageManipulator:
-    inhibit_warnings: false
-    :path: "../../../packages/expo-image-manipulator/ios"
   EXImagePicker:
     inhibit_warnings: false
     :path: "../../../packages/expo-image-picker/ios"
@@ -1085,6 +1082,9 @@ EXTERNAL SOURCES:
   ExpoHaptics:
     inhibit_warnings: false
     :path: "../../../packages/expo-haptics/ios"
+  ExpoImageManipulator:
+    inhibit_warnings: false
+    :path: "../../../packages/expo-image-manipulator/ios"
   ExpoLinearGradient:
     inhibit_warnings: false
     :path: "../../../packages/expo-linear-gradient/ios"
@@ -1284,8 +1284,7 @@ SPEC CHECKSUMS:
   EXGL_CPP: 75124cfe236f7a1f917150011c09625e24e31141
   EXGoogleSignIn: f5b6ed8ce036017c0364896469416e6fc6e0e777
   EXImage: 75d6c625fb8b8ce8ddc622e0dbcdfd0fb160c11e
-  EXImageLoader: 939451be6f7b731aaa6588920b90743f20121a4d
-  EXImageManipulator: f557dae83db7ebbc4fe999a582230c28ffc5e383
+  EXImageLoader: 142cf8878bbd6d2a09edeadcabde00c0f8b74f34
   EXImagePicker: cecd37aa68c3df69fc0599cae92523be84fe6a1d
   EXInAppPurchases: a981bef8aea038e9c4b036f75a6aef73cc723eca
   EXJSONUtils: f515cf71710855d7ba5bfc6752af3b9a6f6aad01
@@ -1306,6 +1305,7 @@ SPEC CHECKSUMS:
   expo-dev-menu-interface: 273c68c2c30ecbc70af2903dfb3821f567ef9d78
   ExpoCellular: 90940614d45df5b31f281d70a63d92a06fe44af4
   ExpoHaptics: c0c014eabfdd1353a908f857f168b01fafd526db
+  ExpoImageManipulator: 7ff9469ccd4ca3bd708aaf39859393bea5fcf7d8
   ExpoLinearGradient: 841746b0ef9c771d1f37fa5463f39eb25b6aae77
   ExpoModulesCore: 3339f23adf96e5b39e6315d5f32b4585ecd4cd43
   ExpoSystemUI: 3c969e3db290fcd5edb9c466d585f183d934b421
