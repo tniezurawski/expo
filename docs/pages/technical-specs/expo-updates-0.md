@@ -185,8 +185,6 @@ An asset is RECOMMENDED to be served with a `cache-control` header set to a long
 cache-control: public, max-age=31536000, immutable
 ```
 
-* `expo-signature` SHOULD contain the signature of the asset to be used during the validation step of [code signing](#code-signing) if the request for the asset contained the `expo-expects-signature` header and the signature for the asset was not specified in the manifest response.
-
 ### Compression
 
 Assets SHOULD be capable of being served with [Gzip](https://www.gnu.org/software/gzip/) and [Brotli](https://github.com/google/brotli) compression.
