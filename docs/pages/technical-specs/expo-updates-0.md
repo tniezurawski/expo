@@ -50,9 +50,9 @@ A conformant client library MUST make a GET request with the headers:
 A conformant client library MUST also send at least one of `accept: application/expo+json` or `accept: application/json`, though SHOULD send `accept: application/expo+json, application/json` with the order following the preference ordering for the accept header specified in [RFC 7231](https://tools.ietf.org/html/rfc7231#section-5.3.2).
 
 A conformant client library configured to perform [code signing](#code-signing) verification SHOULD also send a `expo-expects-signature` header to indicate that it expects the conformant server to include the `expo-signature` header in the manifest response. `expo-expects-signature` is an [Expo SFV](expo-sfv-0.md) dictionary which MAY contain any of the following key value pairs:
-* `sig` SHOULD contain the boolean `true` to indicate that it requires a conformant server to respond with the signature in the `sig` key.
-* `keyid` SHOULD contain the keyId of the public key the client will use to verify the signature
-* `alg` SHOULD contain the algorithm the client will use to verify the signature
+* `sig` SHOULD contain the boolean `true` to indicate that it requires a conformant server to respond with the signature in the `sig` key of the response `expo-signature` header.
+* `keyid` SHOULD contain the keyId of the public key the client will use to verify the signature.
+* `alg` SHOULD contain the algorithm the client will use to verify the signature.
 
 Example:
 ```
@@ -89,10 +89,10 @@ expo-asset-headers: *
 * `expo-server-defined-headers` is an [Expo SFV](expo-sfv.md) dictionary. It defines headers that a client library MUST store until overwritten by a newer dictionary, and they MUST be included in every subsequent [manifest request](#manifest-request).
 * `cache-control` - A value of `cache-control: private, max-age=0` is recommended to ensure the newest manifest is returned. Setting longer cache ages could result in stale updates.
 * `content-type` MUST be determined by _proactive negotiation_ as defined in [RFC 7231](https://tools.ietf.org/html/rfc7231#section-3.4.1). Since the client library is [required](#manifest-request) to send an `accept` header with each manifest request, this will always be either `application/expo+json`, `application/json`; otherwise the request would return a `406` error.
-* `expo-signature` SHOULD contain the signature of the manifest to be used during the validation step of [code signing](#code-signing) if the request for the manifest contained the `expo-accept-signature` header. This is an [Expo SFV](expo-sfv-0.md) dictionary which MAY contain any of the following key value pairs:
+* `expo-signature` SHOULD contain the signature of the manifest to be used during the validation step of [code signing](#code-signing) if the manifest request contained the `expo-accept-signature` header. This is an [Expo SFV](expo-sfv-0.md) dictionary which MAY contain any of the following key value pairs:
     * `sig` MUST contain the signature of the manifest. The name of this field matches that of `expo-accept-signature`.
-    * `keyid` MAY contain the keyId of the key the server used to sign the response. The client SHOULD use the key that matches this `keyid`.
-    * `alg` MAY contain the algorithm the server used to sign the response. The client SHOULD use this field only if it matches the algorithm defined for the key matching `keyid`.
+    * `keyid` MAY contain the keyId of the key the server used to sign the response. The client SHOULD use the certificate that matches this `keyid`.
+    * `alg` MAY contain the algorithm the server used to sign the response. The client SHOULD use this field only if it matches the algorithm defined for the certificate matching `keyid`.
 * `expo-asset-headers` MAY contain an [Expo SFV](expo-sfv-0.md) dictionary of header (key, value) pairs to include with asset requests. This is specified as a header so that dynamic headers needed to request assets (HMACs for example) don't alter the `expo-signature`. This is structured as follows:
 ```typescript
 export type ExpoAssetHeaderDictionary = {
