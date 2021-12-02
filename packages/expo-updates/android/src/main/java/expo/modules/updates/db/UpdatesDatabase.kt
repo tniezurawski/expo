@@ -19,7 +19,7 @@ import java.util.*
 @Database(
   entities = [UpdateEntity::class, UpdateAssetEntity::class, AssetEntity::class, JSONDataEntity::class],
   exportSchema = false,
-  version = 8
+  version = 9
 )
 @TypeConverters(Converters::class)
 abstract class UpdatesDatabase : RoomDatabase() {
@@ -41,6 +41,7 @@ abstract class UpdatesDatabase : RoomDatabase() {
           .addMigrations(MIGRATION_5_6)
           .addMigrations(MIGRATION_6_7)
           .addMigrations(MIGRATION_7_8)
+          .addMigrations(MIGRATION_8_9)
           .fallbackToDestructiveMigration()
           .allowMainThreadQueries()
           .build()
