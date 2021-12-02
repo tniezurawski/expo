@@ -376,7 +376,7 @@ open class FileDownloader(context: Context) {
       return Request.Builder()
         .url(assetEntity.url!!.toString())
         .apply {
-          assetEntity.headers?.let { headers ->
+          assetEntity.extraRequestHeaders?.let { headers ->
             headers.keys().asSequence().forEach { key ->
               header(key, headers.require(key))
             }

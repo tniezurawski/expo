@@ -66,7 +66,7 @@ class NewUpdateManifest private constructor(
           mLaunchAsset.getNullable("fileExtension")
         ).apply {
           url = Uri.parse(mLaunchAsset.getString("url"))
-          headers = assetHeaders[mLaunchAsset.getString("key")]
+          extraRequestHeaders = assetHeaders[mLaunchAsset.getString("key")]
           isLaunchAsset = true
           embeddedAssetFilename = EmbeddedLoader.BUNDLE_FILENAME
         }
@@ -84,7 +84,7 @@ class NewUpdateManifest private constructor(
               assetObject.getString("fileExtension")
             ).apply {
               url = Uri.parse(assetObject.getString("url"))
-              headers = assetHeaders[assetObject.getString("key")]
+              extraRequestHeaders = assetHeaders[assetObject.getString("key")]
               embeddedAssetFilename = assetObject.getNullable("embeddedAssetFilename")
             }
           )

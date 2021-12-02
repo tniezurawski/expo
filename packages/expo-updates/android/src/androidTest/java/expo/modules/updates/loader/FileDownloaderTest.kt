@@ -103,7 +103,7 @@ class FileDownloaderTest {
 
     val assetEntity = AssetEntity("test", "jpg").apply {
       url = Uri.parse("https://example.com")
-      headers = JSONObject().apply { put("expo-platform", "ios") }
+      extraRequestHeaders = JSONObject().apply { put("expo-platform", "ios") }
     }
 
     // assetRequestHeaders should not be able to override preset headers

@@ -161,5 +161,23 @@ abstract class UpdatesDatabase : RoomDatabase() {
         }
       }
     }
+
+    val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        // https://www.sqlite.org/lang_altertable.html#otheralter
+        try {
+          database.execSQL("PRAGMA foreign_keys=OFF")
+          database.beginTransaction()
+          try {
+            database.execSQL("ALTER TABLE `assets` ADD COLUMN `extra_request_headers` TEXT")
+            database.setTransactionSuccessful()
+          } finally {
+            database.endTransaction()
+          }
+        } finally {
+          database.execSQL("PRAGMA foreign_keys=ON")
+        }
+      }
+    }
   }
 }
