@@ -43,33 +43,35 @@ class DevLauncherActivity : ReactActivity(), ReactInstanceManager.ReactInstanceE
     }
   }
 
+
+
   override fun onStart() {
-    overridePendingTransition(0, 0)
+//    overridePendingTransition(0, 0)
     super.onStart()
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    contentView = findViewById(android.R.id.content) ?: return
-    splashScreen = DevLauncherSplashScreenProvider()
-      .attachSplashScreenViewAsync(this)
-    searchForRootView()
+//    contentView = findViewById(android.R.id.content) ?: return
+//    splashScreen = DevLauncherSplashScreenProvider()
+//      .attachSplashScreenViewAsync(this)
+//    searchForRootView()
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
     controller.maybeSynchronizeDevMenuDelegate()
-    reactInstanceManager.currentReactContext?.let {
-      onReactContextInitialized(it)
-      return
-    }
+//    reactInstanceManager.currentReactContext?.let {
+//      onReactContextInitialized(it)
+//      return
+//    }
 
-    reactInstanceManager.addReactInstanceEventListener(this)
+//    reactInstanceManager.addReactInstanceEventListener(this)
   }
 
   override fun onPause() {
-    overridePendingTransition(0, 0)
+//    overridePendingTransition(0, 0)
     super.onPause()
   }
 

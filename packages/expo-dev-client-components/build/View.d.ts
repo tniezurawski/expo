@@ -2,12 +2,12 @@
 export declare const View: import("react").ForwardRefExoticComponent<import("react-native").ViewProps & {
     children?: import("react").ReactNode;
 } & {
-    margin?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
+    margin?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
     mx?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
     my?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    padding?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    px?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    py?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
+    padding?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
+    px?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
+    py?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
     flex?: "1" | "0" | undefined;
     shrink?: "1" | "0" | undefined;
     bg?: "secondary" | "error" | "warning" | "success" | "default" | undefined;
@@ -20,12 +20,12 @@ export declare const View: import("react").ForwardRefExoticComponent<import("rea
 export declare const Row: import("react").ForwardRefExoticComponent<import("react-native").ViewProps & {
     children?: import("react").ReactNode;
 } & {
-    margin?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
+    margin?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
     mx?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
     my?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    padding?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    px?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
-    py?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
+    padding?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
+    px?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
+    py?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
     align?: "center" | "start" | "end" | undefined;
 } & import("react").RefAttributes<import("react-native").ViewProps>>;
 export declare const Spacer: {
@@ -43,7 +43,7 @@ export declare const Spacer: {
 export declare const Divider: import("react").ForwardRefExoticComponent<import("react-native").ViewProps & {
     children?: import("react").ReactNode;
 } & {
-    margin?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
+    margin?: "small" | "medium" | "large" | "tiny" | "huge" | "micro" | undefined;
     mx?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
     my?: "small" | "medium" | "large" | "tiny" | "micro" | undefined;
     weight?: "normal" | "thin" | "heavy" | undefined;

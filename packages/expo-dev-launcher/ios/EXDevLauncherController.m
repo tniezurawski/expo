@@ -27,6 +27,7 @@
 #import <EXManifests/EXManifestsManifestFactory.h>
 
 @import EXDevMenuInterface;
+@import EXDevMenu;
 
 #ifdef EX_DEV_LAUNCHER_VERSION
 #define STRINGIZE(x) #x
@@ -36,7 +37,7 @@
 #endif
 
 // Uncomment the below and set it to a React Native bundler URL to develop the launcher JS
-//#define DEV_LAUNCHER_URL "http://localhost:8090/index.bundle?platform=ios&dev=true&minify=false"
+#define DEV_LAUNCHER_URL "http://localhost:8090/index.bundle?platform=ios&dev=true&minify=false"
 
 NSString *fakeLauncherBundleUrl = @"embedded://EXDevLauncher/dummy";
 
@@ -83,12 +84,15 @@ NSString *fakeLauncherBundleUrl = @"embedded://EXDevLauncher/dummy";
 
 - (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge
 {
-  return @[
-    (id<RCTBridgeModule>)[RCTDevMenu new],
-    [RCTAsyncLocalStorage new],
-    [EXDevLauncherLoadingView new],
-    [EXDevLauncherInternal new]
-  ];
+  
+  NSMutableArray *modules = [[DevMenuVendoredModulesUtils vendoredModules] mutableCopy];
+  
+  [modules addObject:[RCTDevMenu new]];
+  [modules addObject:[RCTAsyncLocalStorage new]];
+  [modules addObject:[EXDevLauncherLoadingView new]];
+  [modules addObject:[EXDevLauncherInternal new]];
+   
+   return modules;
 }
 
 + (NSString * _Nullable)version {
